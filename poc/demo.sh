@@ -80,6 +80,12 @@ main() {
   echo "  id    : $(short "$POST_ID")..."
 
   echo
+  echo "==> Verifying events"
+
+  run verify "$GRANT_ID"
+  run verify "$POST_ID"
+  
+  echo
   echo "==> Authority chain"
   echo
   echo "  Alice"
