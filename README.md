@@ -1,6 +1,17 @@
 # 🕸️ LIBYS Protocol
 ![GitHub License](https://img.shields.io/github/license/foiovituh/libys-core)
  
+A protocol for user-controlled reputation built from verifiable interactions between cryptographic identities.
+
+#### Why it matters
+- Identity is cheap to recreate, but hard to establish trust
+- Reputation is bound to application-specific silos
+- Trust signals are not portable across systems
+
+Reputation is derived from a shared graph of signed interaction events.
+
+---
+
 > <b>Abstract</b>. A purely decentralized version of reputation would allow interactions to be recorded without the need for a central mediator. We propose LIBYS, a protocol where verifiable interaction events between cryptographic identities form a shared graph. Reputation can be derived from hierarchical domains and controlled by temporary capabilities (contextual authority) granted by the user. The protocol creates a reconstruction burden for identity manipulation or abandonment, ensuring that an identity's utility is proportional to its history of legitimate and authorized interactions.
 
 ## 📄 Whitepaper
