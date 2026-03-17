@@ -119,20 +119,20 @@ using signed events**.
 Additional steps executed in the PoC:
 
 1.  Alice creates a forum post
-2.  Bob reacts to the post using social.like
+2.  Vitor reacts to the post using social.like
 
 Example command:
 
     java -cp target/libys-core-0.1.jar \
     io.github.foiovituh.libys.LibysPoc \
-    event bob social.like <POST_HASH> "" '{}'
+    event vitor social.like <POST_HASH> "" '{}'
 
 Graph representation:
 
     alice ── social.forum.post ──> post
                                     ▲
                                     │
-    bob ── social.like ─────────────┘
+    vitor ── social.like ─────────────┘
 
 This demonstrates that LIBYS can represent **social interactions between
 identities through event relationships**.
