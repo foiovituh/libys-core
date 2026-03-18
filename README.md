@@ -1,7 +1,10 @@
 # 🕸️ LIBYS Protocol
 ![GitHub License](https://img.shields.io/github/license/foiovituh/libys-core)
- 
+![GitHub Tag](https://img.shields.io/github/v/tag/foiovituh/libys-core?color=blue)
+
 A protocol for user-controlled reputation built from verifiable interactions between cryptographic identities.
+
+![Illustration](./docs/images/illustration.png)
 
 #### Why it matters
 - Identity is cheap to recreate, but hard to establish trust
@@ -16,7 +19,16 @@ Reputation is derived from a shared graph of signed interaction events.
 
 ## 📄 Whitepaper
 Read the full technical specification: [`WHITEPAPER.pdf`](./WHITEPAPER.pdf)
- 
+
+## 🧩 Use Cases
+The LIBYS architecture is modular. Key examples include:
+
+- Portable Reputation: Carry established trust across forums and platforms.
+- Brokerless Marketplaces: P2P trade verified by history, not central scores.
+- Scoped DAO Governance: Temporary authority delegation via `system.auth.grant`.
+- Sybil-Resistant Social: Structural identity cost to mitigate automated spam.
+- Autonomous Agent Trust: Secure M2M delegation without sharing master keys.
+
 ## 📦 Proof of Concept (PoC)
 This repository contains a Java-based implementation of the core cryptographic primitives and a Bash-orchestrated demonstration.
  
