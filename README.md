@@ -53,9 +53,7 @@ With delegation:
 
 ## 🔍 Reputation Model (Out of Scope)
 
-The protocol does **not** define how reputation is calculated.
-
-Reputation is derived by observers analyzing the trust graph according to their own criteria.
+The protocol does **not** define how reputation is calculated. Reputation is derived by observers analyzing the trust graph according to their own criteria.
 
 This may include:
 - interaction history
