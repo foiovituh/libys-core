@@ -64,7 +64,7 @@ This may include:
 > LIBYS defines verifiable data, not subjective interpretation. Different observers may reach different conclusions from the same data.
 
 ## 📄 Whitepaper
-Read the full technical specification: [`WHITEPAPER.pdf`](./WHITEPAPER.pdf)
+The full technical specification is available in [`WHITEPAPER.pdf`](./WHITEPAPER.pdf).
 
 ## 🧩 Use Cases
 Examples enabled by LIBYS:
