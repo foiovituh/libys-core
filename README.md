@@ -2,42 +2,96 @@
 ![GitHub License](https://img.shields.io/github/license/foiovituh/libys-core)
 ![GitHub Tag](https://img.shields.io/github/v/tag/foiovituh/libys-core?color=blue)
 
-A protocol for user-controlled reputation built from verifiable interactions between cryptographic identities.
+> A protocol for sovereign, portable reputation built from verifiable interactions between cryptographic identities.
 
 ![Illustration](./docs/images/illustration.png)
 
-#### Why it matters
-- Identity is cheap to recreate, but hard to establish trust
-- Reputation is bound to application-specific silos
-- Trust signals are not portable across systems
-
-Reputation is derived from a shared graph of signed interaction events.
-
 ---
 
-> <b>Abstract</b>. A purely decentralized version of reputation would allow interactions to be recorded without the need for a central mediator. We propose LIBYS, a protocol where verifiable interaction events between cryptographic identities form a shared graph. Reputation can be derived from hierarchical domains and controlled by temporary capabilities (contextual authority) granted by the user. The protocol creates a reconstruction burden for identity manipulation or abandonment, ensuring that an identity's utility is proportional to its history of legitimate and authorized interactions.
+## ⚡ TL;DR
+LIBYS turns interactions into a trust graph:
+
+- identities = Ed25519 keypairs
+- actions = signed events
+- authority = expressed via delegation (no key sharing)
+- reputation = derived from graph structure
+
+> Trust is not assigned. It is accumulated.
+
+### 💡 Why this exists
+Today:
+- identity is cheap to recreate
+- reputation is locked inside platforms
+- trust is centralized and non-portable
+
+The protocol separates:
+- identity
+- authority
+- reputation
+
+> So trust can emerge **without a central owner**.
+
+## 🧠 Core Model
+At its simplest form:
+
+```
+(identity) --[signed event]--> (subject)
+```
+
+With delegation:
+
+```
+(identity A) --[system.auth.grant]--> (identity B)  
+(identity B) --[delegated event]--> (subject)
+```
+
+- users can delegate authority to apps
+- applications can delegate authority to users
+- services can delegate to other services
+
+> There is no distinction between “user” and “application” at the protocol level.
+
+## 🔍 Reputation Model (Out of Scope)
+
+The protocol does **not** define how reputation is calculated.
+
+Reputation is derived by observers analyzing the trust graph according to their own criteria.
+
+This may include:
+- interaction history
+- delegation chains
+- graph connectivity
+- cluster detection or filtering
+
+Different observers may reach different conclusions from the same data.
+
+> LIBYS defines **verifiable data**, not **subjective interpretation**.
 
 ## 📄 Whitepaper
 Read the full technical specification: [`WHITEPAPER.pdf`](./WHITEPAPER.pdf)
 
 ## 🧩 Use Cases
-The LIBYS architecture is modular. Key examples include:
+Examples enabled by LIBYS:
 
-- Portable Reputation: Carry established trust across forums and platforms.
-- Brokerless Marketplaces: P2P trade verified by history, not central scores.
-- Scoped DAO Governance: Temporary authority delegation via `system.auth.grant`.
-- Sybil-Resistant Social: Structural identity cost to mitigate automated spam.
-- Autonomous Agent Trust: Secure M2M delegation without sharing master keys.
+- portable reputation: carry trust across platforms
+- brokerless marketplaces: P2P trade based on history
+- scoped DAO governance: delegated authority via `system.auth.grant`
+- sybil-resistant social: structural cost for identity reset
+- autonomous agent trust: secure M2M delegation
 
 ## 📦 Proof of Concept (PoC)
-This repository contains a Java-based implementation of the core cryptographic primitives and a Bash-orchestrated demonstration.
+This repository includes a minimal Java implementation demonstrating:
+- identity creation
+- event signing
+- delegation flow
+- verification
  
 ### Prerequisites
 - Java 17+ & Maven
 - `jq` and `xxd` (for the demo script)
 
 ### Quick Start
-To see the protocol in action (identity creation, authority delegation, and event emission), run the automated demo:
+To see the protocol in action, run the automated demo:
 
 ```bash
 chmod +x poc/demo.sh
@@ -45,10 +99,10 @@ chmod +x poc/demo.sh
 ```
 
 ### Manual Testing
-You can interact with the CLI directly. Detailed examples of `new-id`, `event`, and `verify` commands are available in [poc/NOTES.md](./poc/NOTES.md).
+You can interact with the CLI directly. Detailed examples of commands are available in [poc/NOTES.md](./poc/NOTES.md).
 
 ## ⭐ Support the Project
-If you find the concept of sovereign reputation interesting, please give this project a star! It helps with visibility and motivates continued development of the LIBYS protocol.
+If this idea resonates, give the repo a star.
  
 ## 📄 License
-Distributed under the MIT License. See [LICENSE](./LICENSE) for more information.
+Distributed under the [MIT License](./LICENSE).
