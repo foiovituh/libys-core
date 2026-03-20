@@ -63,9 +63,7 @@ This may include:
 - graph connectivity
 - cluster detection or filtering
 
-Different observers may reach different conclusions from the same data.
-
-> LIBYS defines **verifiable data**, not **subjective interpretation**.
+> LIBYS defines verifiable data, not subjective interpretation. Different observers may reach different conclusions from the same data.
 
 ## 📄 Whitepaper
 Read the full technical specification: [`WHITEPAPER.pdf`](./WHITEPAPER.pdf)
