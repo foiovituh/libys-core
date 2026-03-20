@@ -18,7 +18,7 @@ LIBYS turns interactions into a trust graph:
 
 > Trust is not assigned. It is accumulated.
 
-### 💡 Why this exists
+## 💡 Why this exists
 Today:
 - identity is cheap to recreate
 - reputation is locked inside platforms
