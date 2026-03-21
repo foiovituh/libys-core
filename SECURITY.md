@@ -13,7 +13,7 @@ Only the latest version is supported at this time.
 
 ## Reporting a Vulnerability
 If you discover a security vulnerability in LIBYS, please report it responsibly.
-- Send an email to: foiovituh@outlook.cok
+- Send an email to: foiovituh@outlook.com
 - Include a clear description of the issue
 - Provide steps to reproduce, if possible
 - Include any relevant logs, payloads, or examples
