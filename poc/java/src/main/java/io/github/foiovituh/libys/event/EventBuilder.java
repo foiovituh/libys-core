@@ -10,7 +10,7 @@ public class EventBuilder {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public static Event create(Ed25519PrivateKeyParameters sk, String type,
-            String subject, String authId, Object content) throws Exception {
+            String subject, String authId, String content) throws Exception {
         final byte[] pk = sk.generatePublicKey().getEncoded();
         final long created = Instant.now().getEpochSecond();
         final String pkHex = Crypto.generateHex(pk);

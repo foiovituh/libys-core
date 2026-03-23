@@ -9,7 +9,7 @@ readonly IDENTITIES_DIR="${ROOT_DIR}/data/identities"
 readonly EVENTS_DIR="${ROOT_DIR}/data/events"
 
 build() {
-  echo "==> Building Java PoC"
+  printf "\n==> Building Java PoC\n"
   (cd "$JAVA_DIR" && mvn -q clean package)
 }
 
@@ -22,87 +22,184 @@ clean() {
 }
 
 get_last_event_id() {
-  ls -t "$EVENTS_DIR" | head -n1 | sed 's/.json$//'
+  local id=$(ls -t "$EVENTS_DIR" 2>/dev/null | head -n1 | sed 's/.json$//')
+
+  if [ -z "$id" ]; then
+    echo "ERROR: no events found"
+    exit 1
+  fi
+
+  echo "$id"
 }
 
 get_pubkey() {
-  xxd -p -c 256 "${IDENTITIES_DIR}/$1.pk"
+  local file="${IDENTITIES_DIR}/$1.pk"
+
+  if [ ! -f "$file" ]; then
+    echo "ERROR: identity not found: $1"
+    exit 1
+  fi
+
+  xxd -p -c 256 "$file"
 }
 
 short() {
-  echo "$1" | cut -c1-10
+  printf "%s\n" "$1" | cut -c1-10
 }
 
 separator() {
-  echo "--------------------------------"
+  printf "%s\n" "--------------------------------"
+}
+
+count_files() {
+  find "$1" -type f 2>/dev/null | wc -l
+}
+
+print_header() {
+  separator
+  printf "LIBYS PoC demonstration\n"
+  separator
+}
+
+create_identities() {
+  printf "\n==> Creating identities\n"
+
+  run new-id alice >/dev/null
+  run new-id vitor >/dev/null
+  run new-id shop >/dev/null
+  run new-id api >/dev/null
+
+  ALICE_PK="$(get_pubkey alice)"
+  VITOR_PK="$(get_pubkey vitor)"
+  SHOP_PK="$(get_pubkey shop)"
+  API_PK="$(get_pubkey api)"
+
+  printf "alice  -> %s...\n" "$(short "$ALICE_PK")"
+  printf "vitor  -> %s...\n" "$(short "$VITOR_PK")"
+  printf "shop   -> %s...\n" "$(short "$SHOP_PK")"
+  printf "api    -> %s...\n" "$(short "$API_PK")"
+}
+
+basic_interaction() {
+  printf "\n==> Basic interaction example\n"
+  printf "This demonstrates a simple signed event between identities.\n"
+
+  run event alice social.forum.post "" "" \
+  '{"text":"hello world"}' >/dev/null
+
+  POST_ID="$(get_last_event_id)"
+
+  printf "\nalice --[social.forum.post]--> content\n"
+}
+
+market_interaction() {
+  printf "\n==> Market interaction (reputation signal)\n"
+  printf "This represents a real economic interaction between identities.\n"
+
+  run event vitor market.order.completed "$SHOP_PK" "" \
+  '{"order_id":"ord_1","amount":100,"currency":"USD"}' >/dev/null
+
+  printf "\nvitor --[market.order.completed]--> shop\n"
+}
+
+service_signal() {
+  printf "\n==> Service signal (reliability)\n"
+  printf "This demonstrates how operational events can be recorded.\n"
+
+  run event api api.status.incident "" "" \
+  '{"service":"payments","status":"down","incident_id":"inc_1"}' >/dev/null
+
+  printf "\napi --[api.status.incident]--> system\n"
+}
+
+delegation_flow() {
+  printf "\n==> Delegation (contextual authority)\n"
+  printf "Alice grants API permission to act on her behalf.\n"
+
+  grant_payload='{"types":["social.forum.post"],"expires_at":1893456000}'
+  run event alice system.auth.grant "$API_PK" "" "$grant_payload" >/dev/null
+
+  GRANT_ID="$(get_last_event_id)"
+  ALLOWED_TYPE="$(jq -r '.content | fromjson | .types[0]' "${EVENTS_DIR}/${GRANT_ID}.json")"
+
+  printf "\nalice --[system.auth.grant]--> api\n"
+  printf "  allows: %s\n" "$ALLOWED_TYPE"
+
+  printf "\n==> Delegated action\n"
+  printf "API performs an action using delegated authority.\n"
+
+  run event api social.forum.post "" "$GRANT_ID" \
+  '{"text":"posted via api"}' >/dev/null
+
+  printf "\napi --[social.forum.post]--> content (authorized)\n"
+}
+
+verification() {
+  printf "\n==> Verification\n"
+
+  if run verify "$GRANT_ID" >/dev/null 2>&1; then
+    printf "system.auth.grant : valid signature and hash\n"
+  else
+    printf "system.auth.grant : invalid\n"
+  fi
+}
+
+print_graph() {
+  printf "\n==> Resulting trust graph\n"
+
+  printf "alice\n"
+  printf "  ├─ social.forum.post\n"
+  printf "  └─ system.auth.grant\n"
+  printf "       └─ api\n"
+  printf "            └─ social.forum.post (authorized)\n"
+
+  printf "\nvitor\n"
+  printf "  └─ market.order.completed -> shop\n"
+
+  printf "\napi\n"
+  printf "  └─ api.status.incident\n"
+}
+
+summary() {
+  printf "\n==> Summary\n"
+  printf "identities: %s\n" "$(count_files "$IDENTITIES_DIR")"
+  printf "events    : %s\n" "$(count_files "$EVENTS_DIR")"
+}
+
+data_visibility() {
+  printf "\n==> Data (local storage)\n"
+  printf "Events are stored as content-addressed JSON files.\n\n"
+
+  printf "identities:\n"
+  printf "  %s\n" "$IDENTITIES_DIR"
+
+  printf "\nevents:\n"
+  printf "  %s\n" "$EVENTS_DIR"
+
+  printf "\nexample files:\n"
+  ls -1 "$EVENTS_DIR" | head -n2 | sed "s|^|  ${EVENTS_DIR}/|"
 }
 
 main() {
-  echo
-  separator
-  echo "LIBYS PoC demonstration"
-  separator
-  echo
+  print_header
 
   clean
   build
 
-  echo
-  echo "==> Creating identities"
-  run new-id alice
-  run new-id vitor
+  create_identities
+  basic_interaction
+  market_interaction
+  service_signal
+  delegation_flow
+  verification
+  print_graph
+  summary
+  data_visibility
 
-  VITOR_PK="$(get_pubkey vitor)"
-  
-  echo
-  echo "==> Grant"
-  grant_payload='{"types":["social.forum.post"],"expires_at":1893456000}'
-  run event alice system.auth.grant "$VITOR_PK" "" "$grant_payload"
-
-  GRANT_ID="$(get_last_event_id)"
-  GRANT_FILE="${EVENTS_DIR}/${GRANT_ID}.json"
-  ALLOWED_TYPE=$(jq -r '.content.types[0]' "$GRANT_FILE")
-
-  echo "  Alice -> Vitor"
-  echo "  allows: $ALLOWED_TYPE"
-  echo "  id    : $(short "$GRANT_ID")..."
-
-  echo
-  echo "==> Delegated event"
-  run event vitor social.forum.post "" "$GRANT_ID" '"hello from delegated authority"'
-
-  POST_ID="$(get_last_event_id)"
-  POST_FILE="${EVENTS_DIR}/${POST_ID}.json"
-  EVENT_TYPE=$(jq -r '.type' "$POST_FILE")
-
-  echo "  Vitor -> $EVENT_TYPE"
-  echo "  auth  : $(short "$GRANT_ID")..."
-  echo "  id    : $(short "$POST_ID")..."
-
-  echo
-  echo "==> Verifying events"
-
-  run verify "$GRANT_ID"
-  run verify "$POST_ID"
-  
-  echo
-  echo "==> Authority chain"
-  echo
-  echo "  Alice"
-  echo "    +- grant -> Vitor"
-  echo "         +- allows: $ALLOWED_TYPE"
-  echo "              +- Vitor -> post (authorized)"
-
-  echo
-  echo "==> Files"
-  echo "  identities: $(ls -1 "$IDENTITIES_DIR" | wc -l)"
-  echo "  events    : $(ls -1 "$EVENTS_DIR" | wc -l)"
-
-  echo
+  printf "\n"
   separator
-  echo "PoC finished"
+  printf "PoC finished\n"
   separator
-  echo
 }
 
 main "$@"

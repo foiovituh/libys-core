@@ -7,6 +7,6 @@ public class Event {
     public String type;
     public String subject;
     public String auth_id;
-    public Object content;
+    public String content;
     public String sig;
 }

@@ -1,4 +1,3 @@
-// LibysPoc.java
 package io.github.foiovituh.libys;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,13 +34,12 @@ public class LibysPoc {
                     return;
                 }
                 final Ed25519PrivateKeyParameters sk = Identity.load(args[1]);
-                final Object content = MAPPER.readValue(args[5], Object.class);
                 final Event event = EventBuilder.create(
                         sk,
                         args[2],
                         args[3],
                         args[4],
-                        content
+                        args[5]
                 );
                 EventStore.save(event);
 

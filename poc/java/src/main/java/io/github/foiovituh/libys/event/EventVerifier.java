@@ -20,8 +20,6 @@ public class EventVerifier {
         final String computed = Crypto.generateSha256(serialized);
 
         if (!computed.equals(event.id)) {
-            System.out.println("Invalid event ID");
-
             return false;
         }
 
@@ -32,12 +30,8 @@ public class EventVerifier {
         );
 
         if (!ok) {
-            System.out.println("Invalid signature");
-            
             return false;
         }
-
-        System.out.println("Valid event");
 
         return true;
     }
