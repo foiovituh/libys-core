@@ -2,7 +2,7 @@
 ![GitHub License](https://img.shields.io/github/license/foiovituh/libys-core)
 ![GitHub Tag](https://img.shields.io/github/v/tag/foiovituh/libys-core?color=blue)
 
-> Verifiable Reputation via Delegated Trust.
+> Sovereign Reputation via Delegated Trust Graphs.
 
 ![Illustration](./docs/images/illustration.png)
 
