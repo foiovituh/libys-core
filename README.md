@@ -2,7 +2,7 @@
 ![GitHub License](https://img.shields.io/github/license/foiovituh/libys-core)
 ![GitHub Tag](https://img.shields.io/github/v/tag/foiovituh/libys-core?color=blue)
 
-> A protocol for sovereign, portable reputation built from verifiable interactions between cryptographic identities.
+> Verifiable Reputation via Delegated Trust.
 
 ![Illustration](./docs/images/illustration.png)
 
