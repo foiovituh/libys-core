@@ -151,7 +151,7 @@ print_graph() {
   printf "  ├─ social.forum.post\n"
   printf "  └─ system.auth.grant\n"
   printf "       └─ api\n"
-  printf "            └─ social.forum.post (authorized)\n"
+  printf "            └─ social.forum.post (via delegation)\n"
 
   printf "\nvitor\n"
   printf "  └─ market.order.completed -> shop\n"
